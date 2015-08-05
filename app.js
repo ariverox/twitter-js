@@ -1,28 +1,39 @@
 var express = require('express');
+var tweetBank = require("./tweetBank");
 var app = express();
 var swig = require('swig');
+
+var routes = require("./routes");
+app.use("/tweets", routes);
+
+// swig setup
 swig.setDefaults({ cache: false });
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html' );
 app.set('views', __dirname + '/views');
 
-var people = [{name: 'Full'}, {name: 'Stacker'}, {name: 'Son'}];
+//var people = [{name: 'Full'}, {name: 'Stacker'}, {name: 'Son'}];
 
 
 
-app.post("/", function(request,response){
-  console.dir(response);
-  console.log(request.logx);
-});
+// app.post("/", function(request,response){
+//   console.dir(response);
+//   console.log(request.logx);
+// });
 
-app.get("/birds", function(request, response, next) {
+
+/*
+
+app.get("/tweets/:number", function(request, response, next) {
+  var tweetNumber = request.params.number;
+  console.log(request.params.number);
+  var data = tweetBank.list();
   response.status(200);
-  //console.log(request.logx);
-  response.contents = "birds";
-  //response.send("birds");
+  response.contents = data[tweetNumber];
   next();
 
 });
+
 app.get("/people", function(request,response, next){
   var people = [{name: 'Full'}, {name: 'Stacker'}, {name: 'Son'}];
   response.render( 'index', {title: 'Hall of Fame', people: people }, function(err,html){
@@ -32,6 +43,8 @@ app.get("/people", function(request,response, next){
 
 
 });
+
+*/
 
 app.use( function(request, response, next) {
   request.logx = request.method + request.path;
