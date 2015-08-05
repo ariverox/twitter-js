@@ -1,5 +1,13 @@
 var express = require('express');
 var app = express();
+var swig = require('swig');
+swig.setDefaults({ cache: false });
+app.engine('html', swig.renderFile);
+app.set('view engine', 'html' );
+app.set('views', __dirname + '/views');
+
+var people = [{name: 'Full'}, {name: 'Stacker'}, {name: 'Son'}];
+
 
 
 app.post("/", function(request,response){
@@ -15,13 +23,19 @@ app.get("/birds", function(request, response, next) {
   next();
 
 });
-app.get("/news", function(request,response){
-  response.send("the news");
+app.get("/people", function(request,response, next){
+  var people = [{name: 'Full'}, {name: 'Stacker'}, {name: 'Son'}];
+  response.render( 'index', {title: 'Hall of Fame', people: people }, function(err,html){
+    response.contents = html;
+    next();
+  } );
+
+
 });
 
 app.use( function(request, response, next) {
   request.logx = request.method + request.path;
-  console.log(request.method + request.path  + response.statusCode );
+  console.log(request.method + request.path  + " " +response.statusCode );
   response.send(response.contents);
 });
 
